@@ -30,3 +30,7 @@ client/.vercel/
 # OS Files
 .DS_Store
 Thumbs.db
+
+DEPLOYMENT.md
+PRD.md
+problem_statement.txt

@@ -57,8 +57,10 @@ export default function QuizContainer({ course }: { course: Course }) {
 
             // If no local storage, try fetching from backend
             try {
-                const res = await fetch(`http://localhost:5000/courses/${course.id}/progress/${userId}`, {
-                    headers: { 'x-api-key': 'secret123' }
+                const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+                const apiKey = process.env.NEXT_PUBLIC_API_KEY || 'secret123';
+                const res = await fetch(`${apiUrl}/courses/${course.id}/progress/${userId}`, {
+                    headers: { 'x-api-key': apiKey }
                 });
                 if (res.ok) {
                     const data = await res.json();
@@ -125,13 +127,15 @@ export default function QuizContainer({ course }: { course: Course }) {
 
     const saveProgressToServer = async (isCompleted: boolean = false) => {
          const userId = "user_123";
+         const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+         const apiKey = process.env.NEXT_PUBLIC_API_KEY || 'secret123';
          for (const lesson of course.lessons) {
              try {
-                await fetch(`http://localhost:5000/courses/${course.id}/progress`, {
+                await fetch(`${apiUrl}/courses/${course.id}/progress`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-api-key': 'secret123'
+                        'x-api-key': apiKey
                     },
                     body: JSON.stringify({ 
                         userId, 

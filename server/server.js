@@ -3,11 +3,18 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = 5000;
-const API_KEY = 'secret123';
+const PORT = process.env.PORT || 5000;
+const API_KEY = process.env.API_KEY || 'secret123';
 
-// Middleware
-app.use(cors());
+// Middleware - Updated CORS for production deployment
+app.use(cors({
+    origin: [
+        'http://localhost:3000',
+        'https://*.vercel.app',
+        /\.vercel\.app$/
+    ],
+    credentials: true
+}));
 app.use(bodyParser.json());
 
 // Basic Auth Middleware Simulation

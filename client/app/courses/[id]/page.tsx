@@ -1,9 +1,11 @@
 import QuizContainer from '@/components/QuizContainer';
 
 async function getCourse(id: string) {
-    const res = await fetch(`http://localhost:5000/courses/${id}`, {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    const apiKey = process.env.NEXT_PUBLIC_API_KEY || 'secret123';
+    const res = await fetch(`${apiUrl}/courses/${id}`, {
         headers: {
-            'x-api-key': 'secret123'
+            'x-api-key': apiKey
         },
         cache: 'no-store'
     });
