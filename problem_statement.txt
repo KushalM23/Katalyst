@@ -1,0 +1,18 @@
+Frontend Test: 
+Quiz Component - 
+Develop a responsive quiz interface using HTML, CSS, JavaScript (or React/Next.js) for 5 multiple-choice questions stored in a JS array. Display one question at a time with radio buttons for options, next/submit navigation, score summary on completion, and localStorage to save progress.
+Requirements: Progress bar showing question number/total. Immediate feedback per question (correct/incorrect highlight).
+Responsive design for mobile/desktop; accessible with keyboard navigation.
+Handle edge cases like revisiting questions.
+
+Backend Test: 
+Course API - 
+Build a Node.js/Express REST API for "courses" with endpoints to manage lessons and track user progress (use in-memory data or a simple JSON file). Fields: course ID, title, lessons array (with quiz questions), user progress (completed lessons).
+
+Endpoints: POST /courses: Create course with lessons/quizzes.
+GET /courses/:id: Fetch course details.
+POST /courses/:id/progress: Update user progress (userId, lessonId).
+GET /courses/:id/progress/:userId: Get user progress report.
+
+Requirements: Basic auth middleware simulation (e.g., API key header).
+Validate inputs; return scores for quizzes in progress. Error handling (404, 400).
