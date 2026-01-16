@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Link from 'next/link';
 
 interface ScoreSummaryProps {
@@ -10,49 +9,77 @@ interface ScoreSummaryProps {
 
 export default function ScoreSummary({ score, total, onReset }: ScoreSummaryProps) {
     const percentage = Math.round((score / total) * 100);
-    let message = "Good effort!";
-    if (percentage === 100) message = "Perfect Score!";
-    else if (percentage >= 80) message = "Excellent Work!";
-    else if (percentage >= 50) message = "Not bad, keep learning!";
+    const isPassed = percentage >= 60;
+    
+    // Circle math
+    const radius = 80;
+    const circumference = 2 * Math.PI * radius;
+    const strokeDashoffset = circumference - (circumference * percentage) / 100;
 
     return (
-        <div className="max-w-md mx-auto mt-16 p-8 bg-white rounded-3xl shadow-xl border border-gray-100 text-center animate-in zoom-in-95 duration-500">
-            <div className="mb-8">
-                 <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 italic mb-2">Katalyst</h1>
-                 <p className="text-gray-400 text-sm uppercase tracking-widest font-semibold">Course Completed</p>
-            </div>
-            
-            <div className="relative w-40 h-40 mx-auto mb-8 flex items-center justify-center">
-                {/* Simple Circular Progress using SVG */}
-                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="#f3f4f6" strokeWidth="8" />
-                    <circle 
-                        cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="8" 
-                        className="text-indigo-600 transition-all duration-1000 ease-out"
-                        strokeDasharray="283"
-                        strokeDashoffset={283 - (283 * percentage) / 100}
-                        strokeLinecap="round"
-                    />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-4xl font-bold text-indigo-900">{score}</span>
-                    <span className="text-gray-400 text-sm font-medium">of {total}</span>
+        <div className="flex flex-col items-center justify-center min-h-[50vh] animate-in zoom-in-95 duration-500 w-full max-w-2xl mx-auto font-geistSans">
+            {/* Main Card: Black background, sharp edges, green border */}
+            <div className="relative w-full p-8 md:p-12 bg-black border border-green-900/30 shadow-[0_0_50px_rgba(34,197,94,0.05)] flex flex-col items-center text-center">
+                
+                {/* Result Circle: Sharp, tech-looking */}
+                <div className="relative w-52 h-52 mb-8">
+                     <svg className="w-full h-full transform -rotate-90">
+                        {/* Track Background */}
+                        <circle cx="104" cy="104" r={radius} fill="none" stroke="#1a1a1a" strokeWidth="6" />
+                        
+                        {/* Progress */}
+                        <circle
+                            cx="104"
+                            cy="104"
+                            r={radius}
+                            fill="none"
+                            stroke={isPassed ? "#22c55e" : "#dc2626"}
+                            strokeWidth="6"
+                            strokeDasharray={circumference}
+                            strokeDashoffset={strokeDashoffset}
+                            strokeLinecap="square"
+                            className="transition-all duration-1000 ease-out"
+                        />
+                    </svg>
+                    
+                    <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                        <span className={`text-5xl  tracking-tighter ${isPassed ? 'text-green-500' : 'text-red-500'} drop-shadow-md`}>
+                            {percentage}%
+                        </span>
+                        <span className={`text-xs uppercase tracking-widest mt-2 ${isPassed ? 'text-green-600' : 'text-red-700'}`}>{isPassed ? 'Passed' : 'Failed'}</span>
+                    </div>
                 </div>
-            </div>
 
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">{message}</h2>
-            <p className="text-gray-500 mb-8">Your progress has been saved to your profile.</p>
+                <h2 className="text-3xl  mb-6 text-white uppercase tracking-widest">
+                    {isPassed ? <span className="text-green-500 drop-shadow-[0_0_15px_rgba(34,197,94,0.4)]">Quiz Completed</span> : <span className="text-red-500">Quiz Failed</span>}
+                </h2>
+                
+                <div className="text-neutral-400 mb-12 max-w-md text-sm leading-relaxed border-l-2 border-green-900/30 pl-6 py-2 text-left">
+                     <p>{isPassed 
+                        ? "Excellent work. You have demonstrated a strong understanding of the material." 
+                        : "You did not meet the passing requirements. Please review the material and try again."}</p>
+                </div>
 
-            <div className="space-y-3">
-                <button 
-                    onClick={onReset}
-                    className="w-full px-6 py-3.5 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:shadow-indigo-300 transition-all transform hover:-translate-y-0.5"
-                >
-                    Retake Quiz
-                </button>
-                <Link href="/" className="block w-full px-6 py-3.5 bg-white text-gray-700 border-2 border-gray-100 rounded-xl font-bold hover:bg-gray-50 hover:border-gray-200 transition-colors">
-                    Back to Courses
-                </Link>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-lg">
+                    {/* Retry Button */}
+                    <button
+                        onClick={onReset}
+                        className="group w-full py-4 bg-green-600 hover:bg-green-500 text-black transition-all duration-300"
+                    >
+                         <span className="flex items-center justify-center gap-2  tracking-widest uppercase text-xs">
+                            [ Retry Quiz ]
+                         </span>
+                    </button>
+                    
+                    {/* Return Button */}
+                    <Link
+                        href="/"
+                        className="w-full py-4 text-center border border-neutral-800 hover:border-green-800 text-neutral-500 hover:text-green-500 transition-all  tracking-widest uppercase text-xs flex items-center justify-center"
+                    >
+                        <span>// Return to Hub</span>
+                    </Link>
+                </div>
+
             </div>
         </div>
     );
